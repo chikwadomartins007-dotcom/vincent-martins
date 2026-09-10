@@ -1,8 +1,8 @@
 import React from 'react';
-import { CheckCircle, X, Truck, MessageSquare, PhoneCall } from 'lucide-react';
+import { CheckCircle, X, Truck, MessageSquare, PhoneCall, Mail } from 'lucide-react';
 import { OrderFormData } from '../types';
 import { formatNaira, createWhatsAppUrl } from '../utils/format';
-import { getTierForQty } from '../data/mockData';
+import { getTierForQty, DISPLAY_WHATSAPP } from '../data/mockData';
 
 interface OrderSuccessModalProps {
   isOpen: boolean;
@@ -40,7 +40,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors"
+          className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5" />
@@ -63,8 +63,14 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
           </div>
         </div>
 
+        {/* Email transmission notification banner */}
+        <div className="mt-4 p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2">
+          <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>Order details have been emailed directly to our sales desk.</span>
+        </div>
+
         {/* Order Details Summary Box */}
-        <div className="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm space-y-2">
+        <div className="mt-4 p-4 rounded-xl bg-gray-50 border border-gray-200 text-xs sm:text-sm space-y-2">
           <div className="flex justify-between">
             <span className="text-gray-500 font-semibold">Item:</span>
             <span className="font-bold text-gray-900">A-01 Smart Door Lock</span>
@@ -93,7 +99,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
         <div className="mt-4 p-3 rounded-xl bg-red-50 border border-red-200 text-red-900 text-xs font-medium flex items-start gap-2.5">
           <Truck className="w-4 h-4 text-red-600 shrink-0 mt-0.5" />
           <p>
-            Our logistics team will call you on <strong>{orderData.phoneNumber}</strong> within 1–2 hours to confirm your address before dispatch.
+            Our logistics team will call you on <strong>{orderData.phoneNumber}</strong> to verify address and schedule delivery. You can also message us directly on WhatsApp at <strong>{DISPLAY_WHATSAPP}</strong>.
           </p>
         </div>
 
@@ -106,7 +112,7 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
             className="flex-1 inline-flex items-center justify-center gap-2 h-12 px-5 rounded-xl font-bold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-700 transition-colors shadow-sm"
           >
             <MessageSquare className="w-4 h-4" />
-            <span>Notify on WhatsApp</span>
+            <span>Notify on WhatsApp ({DISPLAY_WHATSAPP})</span>
           </a>
 
           <button

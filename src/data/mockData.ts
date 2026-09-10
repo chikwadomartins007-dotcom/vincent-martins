@@ -1,9 +1,101 @@
-import { PricingTier, ProductImage, HardwareItem, UnlockMethod, Testimonial, FaqItem } from '../types';
+import { PricingTier, ProductImage, HardwareItem, UnlockMethod, Testimonial, FaqItem, HeroSlide, AppInterfaceSlide } from '../types';
 
 export const BASE_PRICE = 160000;
 export const ORIGINAL_PRICE = 180000;
 export const SAVINGS_PER_UNIT = 20000;
-export const DEFAULT_WHATSAPP = '2348039281745'; // Business WhatsApp number for Nigeria
+export const DEFAULT_WHATSAPP = '2348147778029'; // WhatsApp: 08147778029 (+2348147778029)
+export const DISPLAY_WHATSAPP = '0814 777 8029';
+export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xaeyaklo';
+
+export const HERO_SLIDES: HeroSlide[] = [
+  {
+    id: 'slide-flagship',
+    tabTitle: '01. Dual-Panel Hardware',
+    badge: 'A-01 FLAGSHIP LUXURY SERIES',
+    headlinePrefix: 'STOP USING ORDINARY KEYS.',
+    headlineHighlight: 'UPGRADE TO SMART ACCESS.',
+    subheadline: 'Dual-panel design with indoor 4.0-inch color screen and outdoor high-security biometric handle.',
+    keyFeature: 'Indoor 4.0" Color IPS Screen • Outdoor Biometric Handle • Complete Keyless Living',
+    bullets: ['4.0" Color Interior Screen', 'Real-Time Doorbell Alerts', 'Payment on Delivery in Nigeria'],
+    imageIndex: 0,
+  },
+  {
+    id: 'slide-methods',
+    tabTitle: '02. 8 Unlock Modes',
+    badge: 'MULTI-FACTOR RECOGNITION',
+    headlinePrefix: 'UNLOCK YOUR DOOR',
+    headlineHighlight: 'IN 8 SMART WAYS.',
+    subheadline: 'Hands-free 3D infrared face recognition, lightning-fast 0.3s fingerprint, virtual anti-peep PIN & NFC cards.',
+    keyFeature: '3D Infrared Sensor • 99.8% Biometric Precision • Anti-Peep Virtual PIN Protection',
+    bullets: ['< 0.3s Fingerprint Speed', 'Hands-Free Night-Vision Face ID', 'Temporary Guest Passcodes'],
+    imageIndex: 1,
+  },
+  {
+    id: 'slide-tuya',
+    tabTitle: '03. Tuya Phone App',
+    badge: 'SMARTPHONE ECOSYSTEM',
+    headlinePrefix: 'CONTROL YOUR ENTIRE DOOR',
+    headlineHighlight: 'FROM YOUR SMARTPHONE.',
+    subheadline: 'Unlock remotely via Tuya / Smart Life, speak to doorstep visitors in two-way HD audio, and track entries.',
+    keyFeature: 'Remote Wi-Fi Unlocking • Live Doorbell Intercom • Real-Time Access & Battery Logs',
+    bullets: ['Remote Unlock Worldwide', 'Two-Way Audio Talk with Visitors', 'Timed Airbnb & Cleaner OTPs'],
+    imageIndex: 3,
+  },
+  {
+    id: 'slide-mortise',
+    tabTitle: '04. Heavy-Duty Mortise',
+    badge: '304 SOLID STAINLESS STEEL',
+    headlinePrefix: 'BUILT LIKE A VAULT.',
+    headlineHighlight: '24×240MM SOLID STEEL.',
+    subheadline: 'Reinforced anti-saw, anti-pry 304 stainless steel multi-bolt mortise body engineered for extreme security.',
+    keyFeature: 'Anti-Drill C-Grade Cylinder • Triple Solid Deadbolts • Standard Nigerian Door Fit',
+    bullets: ['Fits Standard 40–120mm Doors', 'Triple Stainless Deadbolts', 'Anti-Prying Night Thumbturn'],
+    imageIndex: 2,
+  },
+];
+
+export const APP_INTERFACE_SLIDES: AppInterfaceSlide[] = [
+  {
+    id: 'app-remote',
+    title: 'One-Tap Remote Unlock',
+    subtitle: 'Tuya Smart / Smart Life Global Cloud',
+    description: 'Grant instant entry to family members, cleaners, or delivery riders from your sofa or while abroad with bank-grade encryption.',
+    tag: 'Remote Control',
+    iconName: 'Smartphone',
+    statusBadge: 'DOOR UNLOCKED (5s)',
+    imageSrc: '/assets/img/smart-lock-app-unlock.png',
+  },
+  {
+    id: 'app-intercom',
+    title: 'Live Doorbell & Two-Way Talk',
+    subtitle: '1080p Wide-Angle Video Call',
+    description: 'When a visitor presses the doorbell, your phone rings with a live video feed allowing you to see and talk before unlocking.',
+    tag: 'Video Intercom',
+    iconName: 'Bell',
+    statusBadge: 'LIVE 1080P AUDIO / VIDEO',
+    imageSrc: '/assets/img/smart_lock_app_1788954743392.jpg',
+  },
+  {
+    id: 'app-otp',
+    title: 'Temporary Guest OTP Passcode',
+    subtitle: 'Time-Limited Access Generator',
+    description: 'Create unique time-bound PIN codes for short-let guests, repairmen, or housekeepers that automatically expire after use.',
+    tag: 'Guest Access',
+    iconName: 'ShieldCheck',
+    statusBadge: 'OTP VALID: 30 MINS',
+    imageSrc: '/assets/img/smart-lock-methods.png',
+  },
+  {
+    id: 'app-logs',
+    title: 'Real-Time Access Logs & Battery',
+    subtitle: 'Timestamped Audit Trail',
+    description: 'Receive instant push alerts showing who unlocked the door (Face, Fingerprint, or PIN) along with accurate battery telemetry.',
+    tag: 'Telemetry & Logs',
+    iconName: 'Wifi',
+    statusBadge: 'BATTERY: 98% • SYSTEM NORMAL',
+    imageSrc: '/assets/img/smart_lock_detail_1788954755903.jpg',
+  },
+];
 
 export const PRICING_TIERS: PricingTier[] = [
   { quantity: 1, unitPrice: 160000, totalPrice: 160000, savings: 0, label: '1 PIECE' },
@@ -266,7 +358,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     date: '1 week ago',
     review:
-      'I run a short-let apartment in Abuja. The OTP feature alone has saved me countless trips—I just generate a temporary passcode for each guest and set the expiry date. Max Luxury Bathrooms customer service was top notch.',
+      'I run a short-let apartment in Abuja. The OTP feature alone has saved me countless trips—I just generate a temporary passcode for each guest and set the expiry date. Max Luxury Home Tech customer service was top notch.',
     verified: true,
     lockInstalledOn: 'Serviced Short-Let Apartment',
   },
@@ -288,7 +380,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     date: '3 weeks ago',
     review:
-      'No more searching for keys inside my handbag in the rain! The fingerprint unlock is lightning fast. Payment on delivery gave me 100% peace of mind before buying. Highly recommend Max Luxury Bathrooms.',
+      'No more searching for keys inside my handbag in the rain! The fingerprint unlock is lightning fast. Payment on delivery gave me 100% peace of mind before buying. Highly recommend Max Luxury Home Tech.',
     verified: true,
     lockInstalledOn: 'Master Suite & Penthouse',
   },

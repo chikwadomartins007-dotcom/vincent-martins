@@ -11,15 +11,17 @@ import {
   User,
   MapPin,
   Sparkles,
+  Loader2,
+  Mail,
 } from 'lucide-react';
-import { NIGERIAN_STATES, getTierForQty, DEFAULT_WHATSAPP } from '../data/mockData';
+import { NIGERIAN_STATES, getTierForQty, DEFAULT_WHATSAPP, FORMSPREE_ENDPOINT, DISPLAY_WHATSAPP } from '../data/mockData';
 import { formatNaira, createWhatsAppUrl } from '../utils/format';
 import { OrderFormData } from '../types';
 
 interface OrderFormProps {
   quantity: number;
   onQuantityChange: (q: number) => void;
-  onSubmitOrder: (data: OrderFormData) => void;
+  onSubmitOrder: (data: OrderFormData, orderRef?: string) => void;
   businessWhatsApp: string;
 }
 
@@ -35,6 +37,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
     fullName: '',
     phoneNumber: '',
     whatsappNumber: '',
+    email: '',
     deliveryAddress: '',
     city: '',
     state: 'Lagos',
@@ -45,6 +48,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   });
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   // Sync internal form quantity if prop changes
   React.useEffect(() => {
@@ -68,7 +72,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.fullName.trim()) {
       setErrorMsg('Please enter your full name.');
@@ -92,7 +96,71 @@ export const OrderForm: React.FC<OrderFormProps> = ({
     }
 
     setErrorMsg(null);
-    onSubmitOrder({ ...formData, quantity });
+    setIsSubmitting(true);
+
+    const generatedRef = 'MLH-' + Math.floor(100000 + Math.random() * 900000);
+
+    try {
+      // Send sales details directly to the user's Formspree endpoint
+      const payload = {
+        _subject: `New Smart Lock Order [${generatedRef}]: ${formData.fullName} (${formatNaira(currentTier.totalPrice)})`,
+        Order_Reference: generatedRef,
+        Product_Ordered: 'A-01 Flagship Smart Door Lock (Dual-Panel, Indoor 4" Screen + Biometric Handle)',
+        Quantity: `${quantity} Unit(s)`,
+        Unit_Price: formatNaira(currentTier.unitPrice),
+        Total_Amount: formatNaira(currentTier.totalPrice),
+        Discount_Savings: currentTier.savings > 0 ? formatNaira(currentTier.savings) : '₦0',
+        Customer_Full_Name: formData.fullName,
+        Phone_Number_Calls: formData.phoneNumber,
+        WhatsApp_Number: formData.whatsappNumber || formData.phoneNumber,
+        Customer_Email: formData.email || 'Not provided',
+        Delivery_Address: formData.deliveryAddress,
+        City_Town: formData.city,
+        State: formData.state,
+        Payment_Method: formData.paymentMethod,
+        Order_Time_Lagos: new Date().toLocaleString('en-NG', { timeZone: 'Africa/Lagos' }),
+        Merchant_WhatsApp: DISPLAY_WHATSAPP,
+        ...(formData.email ? { _replyto: formData.email } : {}),
+      };
+
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        console.warn('Formspree returned status:', response.status);
+      }
+    } catch (err) {
+      console.error('Error submitting order to Formspree:', err);
+    } finally {
+      // Fire Meta Pixel Purchase and Lead event conversions
+      if (typeof window !== 'undefined' && typeof (window as any).fbq === 'function') {
+        try {
+          (window as any).fbq('track', 'Purchase', {
+            value: currentTier.totalPrice,
+            currency: 'NGN',
+            content_name: 'A-01 Smart Door Lock',
+            content_type: 'product',
+            num_items: quantity,
+          });
+          (window as any).fbq('track', 'Lead', {
+            content_name: 'Smart Lock Order Inquiry',
+            value: currentTier.totalPrice,
+            currency: 'NGN',
+          });
+        } catch (pixelErr) {
+          console.debug('Meta Pixel tracking error', pixelErr);
+        }
+      }
+
+      setIsSubmitting(false);
+      onSubmitOrder({ ...formData, quantity }, generatedRef);
+    }
   };
 
   const whatsAppDirectLink = createWhatsAppUrl(
@@ -156,7 +224,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 />
               </div>
 
-              {/* Phone Numbers */}
+              {/* Phone Numbers & Email */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
@@ -167,8 +235,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     name="phoneNumber"
                     value={formData.phoneNumber}
                     onChange={handleChange}
+                    disabled={isSubmitting}
                     placeholder="e.g. 0803 123 4567"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all disabled:bg-gray-100 disabled:opacity-75"
                     required
                   />
                 </div>
@@ -182,8 +251,27 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     name="whatsappNumber"
                     value={formData.whatsappNumber}
                     onChange={handleChange}
+                    disabled={isSubmitting}
                     placeholder="e.g. 0803 123 4567 (Optional if same)"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all disabled:bg-gray-100 disabled:opacity-75"
+                  />
+                </div>
+              </div>
+
+              {/* Email Address (Optional) */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Email Address (Optional)
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email || ''}
+                    onChange={handleChange}
+                    disabled={isSubmitting}
+                    placeholder="e.g. yourname@gmail.com (to receive sales receipt)"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all disabled:bg-gray-100 disabled:opacity-75"
                   />
                 </div>
               </div>
@@ -198,8 +286,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                   name="deliveryAddress"
                   value={formData.deliveryAddress}
                   onChange={handleChange}
+                  disabled={isSubmitting}
                   placeholder="House number, street name, estate, landmark..."
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all"
+                  className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all disabled:bg-gray-100 disabled:opacity-75"
                   required
                 />
               </div>
@@ -215,8 +304,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     name="city"
                     value={formData.city}
                     onChange={handleChange}
+                    disabled={isSubmitting}
                     placeholder="e.g. Lekki Phase 1, Ikeja, Maitama"
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all"
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all disabled:bg-gray-100 disabled:opacity-75"
                     required
                   />
                 </div>
@@ -229,7 +319,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 bg-white focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all"
+                    disabled={isSubmitting}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm font-semibold text-gray-900 bg-white focus:border-blue-600 focus:ring-3 focus:ring-blue-600/15 focus:outline-none transition-all disabled:bg-gray-100 disabled:opacity-75"
                     required
                   >
                     {NIGERIAN_STATES.map((st) => (
@@ -316,9 +407,21 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <button
                   type="submit"
-                  className="flex-1 inline-flex items-center justify-center h-14 px-8 rounded-xl font-black text-sm tracking-wide text-white bg-red-600 hover:bg-red-700 active:scale-98 transition-all shadow-md shadow-red-600/25 cursor-pointer"
+                  disabled={isSubmitting}
+                  className={`flex-1 inline-flex items-center justify-center h-14 px-8 rounded-xl font-black text-sm tracking-wide text-white transition-all shadow-md cursor-pointer ${
+                    isSubmitting
+                      ? 'bg-red-400 cursor-not-allowed opacity-90'
+                      : 'bg-red-600 hover:bg-red-700 active:scale-98 shadow-red-600/25'
+                  }`}
                 >
-                  PLACE MY ORDER
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>SUBMITTING ORDER TO SALES DESK...</span>
+                    </div>
+                  ) : (
+                    <span>PLACE MY ORDER</span>
+                  )}
                 </button>
 
                 <a
@@ -328,8 +431,14 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                   className="inline-flex items-center justify-center gap-2 h-14 px-6 rounded-xl font-bold text-sm tracking-wide text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 transition-colors"
                 >
                   <MessageSquare className="w-4 h-4 text-emerald-600" />
-                  <span>ORDER ON WHATSAPP</span>
+                  <span>ORDER ON WHATSAPP ({DISPLAY_WHATSAPP})</span>
                 </a>
+              </div>
+
+              {/* Formspree & Direct Notice */}
+              <div className="pt-2 text-center text-xs text-gray-500 flex items-center justify-center gap-1.5 font-medium">
+                <Mail className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                <span>Sales details are instantly transmitted to our sales email via Formspree & WhatsApp: {DISPLAY_WHATSAPP}.</span>
               </div>
             </form>
           </div>

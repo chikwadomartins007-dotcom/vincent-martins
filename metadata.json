@@ -1,6 +1,8 @@
 {
-  "name": "MAX LUXURY BATHROOMS — A-01 Smart Door Lock",
-  "description": "Official landing & ordering page for the A-01 Smart Door Lock by MAX LUXURY BATHROOMS. Multi-factor unlock, tiered quantity discounts, payment on delivery, and nationwide Nigerian shipping.",
+  "name": "MAX LUXURY HOME TECH — A-01 Smart Door Lock",
+  "description": "Official landing & ordering page for the A-01 Smart Door Lock by MAX LUXURY HOME TECH. Multi-factor unlock, tiered quantity discounts, payment on delivery, and nationwide Nigerian shipping.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

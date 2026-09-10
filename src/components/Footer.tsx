@@ -17,11 +17,11 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
                 M
               </div>
               <span className="font-black text-white text-lg tracking-tight">
-                MAX LUXURY BATHROOMS
+                MAX LUXURY HOME TECH
               </span>
             </div>
             <p className="text-xs sm:text-sm text-gray-400 leading-relaxed max-w-sm">
-              Nigeria's trusted distributor of high-security smart door locks, architectural security fittings, and luxury bathroom accessories.
+              Nigeria's trusted distributor of high-security smart door locks, architectural security fittings, and luxury home technology solutions.
             </p>
           </div>
 
@@ -50,20 +50,20 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
               Direct Inquiries
             </h4>
             <p className="text-xs text-gray-400 leading-relaxed mb-3">
-              Need installation assistance or bulk estate orders? Chat directly with our sales desk on WhatsApp.
+              Need installation assistance or bulk estate orders? Chat directly with our sales desk on WhatsApp: <strong className="text-white">0814 777 8029</strong>.
             </p>
             <button
               onClick={onWhatsAppClick}
               className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-colors cursor-pointer"
             >
               <MessageSquare className="w-4 h-4" />
-              <span>Connect on WhatsApp</span>
+              <span>WhatsApp: 0814 777 8029</span>
             </button>
           </div>
         </div>
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} MAX LUXURY BATHROOMS. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} MAX LUXURY HOME TECH. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <span>A-01 Flagship Smart Door Lock</span>
             <span>•</span>

@@ -24,15 +24,16 @@ export const VideoSection: React.FC = () => {
             <div className="relative w-full pt-[177.78%] rounded-2xl overflow-hidden shadow-xl border-4 border-gray-900 bg-black">
               <iframe
                 title="A-01 Smart Door Lock video demo"
-                src="https://www.youtube.com/embed/2djUOJ_PIWY?rel=0&modestbranding=1"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                src="https://www.youtube.com/embed/2djUOJ_PIWY?autoplay=1&mute=1&playsinline=1&loop=1&playlist=2djUOJ_PIWY&controls=1&rel=0&modestbranding=1&enablejsapi=1"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 referrerPolicy="no-referrer"
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>
-            <p className="text-center text-xs font-semibold text-gray-500 mt-3">
-              9:16 Vertical Video Demo • Play with sound enabled
+            <p className="text-center text-xs font-semibold text-gray-500 mt-3 flex items-center justify-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Autoplaying Live Demo • Tap video to unmute sound</span>
             </p>
           </div>
 

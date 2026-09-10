@@ -21,3 +21,12 @@
      1px  1px 1px rgba(0, 0, 0, 0.85),
      0 2px 6px rgba(0, 0, 0, 0.7);
 }
+
+@keyframes expandProgress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}

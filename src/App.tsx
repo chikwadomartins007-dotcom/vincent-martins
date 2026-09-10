@@ -52,9 +52,9 @@ export default function App() {
     setLightboxOpen(true);
   };
 
-  const handleOrderSubmit = (data: OrderFormData) => {
-    const randomRef = 'MLB-' + Math.floor(100000 + Math.random() * 900000);
-    setOrderReference(randomRef);
+  const handleOrderSubmit = (data: OrderFormData, generatedRef?: string) => {
+    const finalRef = generatedRef || ('MLH-' + Math.floor(100000 + Math.random() * 900000));
+    setOrderReference(finalRef);
     setSubmittedOrder(data);
     setShowSuccessModal(true);
   };

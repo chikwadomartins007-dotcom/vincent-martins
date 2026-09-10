@@ -12,7 +12,7 @@ export const createWhatsAppUrl = (
   deliveryCity?: string
 ): string => {
   const cleanPhone = phone.replace(/[^0-9]/g, '');
-  let message = `Hello MAX LUXURY BATHROOMS,\n\nI want to order the *A-01 Smart Door Lock*.\n\n`;
+  let message = `Hello MAX LUXURY HOME TECH,\n\nI want to order the *A-01 Smart Door Lock*.\n\n`;
   message += `📦 Quantity: ${quantity} piece${quantity > 1 ? 's' : ''}\n`;
   message += `💰 Total Amount: ${formatNaira(totalPrice)}\n`;
   message += `🚚 Terms: Payment on Delivery (Nationwide Delivery)\n`;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ShieldCheck, Truck, Phone, MessageSquare } from 'lucide-react';
-import { DEFAULT_WHATSAPP } from '../data/mockData';
+import { DEFAULT_WHATSAPP, DISPLAY_WHATSAPP } from '../data/mockData';
 
 interface HeaderProps {
   onWhatsAppClick: () => void;
@@ -17,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({ onWhatsAppClick }) => {
           </div>
           <div>
             <a href="#" className="font-black text-gray-900 tracking-tight text-lg sm:text-xl hover:text-red-600 transition-colors">
-              MAX LUXURY BATHROOMS
+              MAX LUXURY HOME TECH
             </a>
             <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:block">
               Premium Smart Security & Architectural Hardware
@@ -36,11 +36,11 @@ export const Header: React.FC<HeaderProps> = ({ onWhatsAppClick }) => {
 
           <button
             onClick={onWhatsAppClick}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-all shadow-xs active:scale-95"
-            title="Chat directly on WhatsApp"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-all shadow-xs active:scale-95 cursor-pointer"
+            title={`Chat directly on WhatsApp: ${DISPLAY_WHATSAPP}`}
           >
             <MessageSquare className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">WhatsApp Order</span>
+            <span className="hidden sm:inline">WhatsApp: {DISPLAY_WHATSAPP}</span>
             <span className="sm:hidden">WhatsApp</span>
           </button>
         </div>

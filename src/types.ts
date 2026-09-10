@@ -15,6 +15,29 @@ export interface ProductImage {
   badge?: string;
 }
 
+export interface HeroSlide {
+  id: string;
+  tabTitle: string;
+  badge: string;
+  headlinePrefix: string;
+  headlineHighlight: string;
+  subheadline: string;
+  keyFeature: string;
+  bullets: string[];
+  imageIndex: number;
+}
+
+export interface AppInterfaceSlide {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  tag: string;
+  iconName: string;
+  statusBadge: string;
+  imageSrc: string;
+}
+
 export interface HardwareItem {
   id: string;
   title: string;
@@ -52,6 +75,7 @@ export interface OrderFormData {
   fullName: string;
   phoneNumber: string;
   whatsappNumber: string;
+  email?: string;
   deliveryAddress: string;
   city: string;
   state: string;

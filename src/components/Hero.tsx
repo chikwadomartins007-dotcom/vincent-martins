@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   ShieldCheck,
   Truck,
@@ -9,9 +9,19 @@ import {
   ArrowRight,
   MessageSquare,
   Sparkles,
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause,
 } from 'lucide-react';
 import { HeroGallery } from './HeroGallery';
-import { PRODUCT_IMAGES, BASE_PRICE, ORIGINAL_PRICE, SAVINGS_PER_UNIT } from '../data/mockData';
+import {
+  PRODUCT_IMAGES,
+  HERO_SLIDES,
+  BASE_PRICE,
+  ORIGINAL_PRICE,
+  SAVINGS_PER_UNIT,
+} from '../data/mockData';
 import { formatNaira } from '../utils/format';
 
 interface HeroProps {
@@ -20,33 +30,163 @@ interface HeroProps {
   onOpenLightbox: (index: number) => void;
 }
 
+const HERO_SLIDE_INTERVAL_MS = 4800;
+
 export const Hero: React.FC<HeroProps> = ({
   onOrderClick,
   onWhatsAppClick,
   onOpenLightbox,
 }) => {
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const nextSlide = useCallback(() => {
+    setActiveSlideIndex((prev) => (prev + 1) % HERO_SLIDES.length);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setActiveSlideIndex((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+  }, []);
+
+  // Synchronized Hero Slideshow Timer
+  useEffect(() => {
+    if (!isPlaying || isHovered) return;
+
+    const timer = setInterval(() => {
+      nextSlide();
+    }, HERO_SLIDE_INTERVAL_MS);
+
+    return () => clearInterval(timer);
+  }, [isPlaying, isHovered, nextSlide, activeSlideIndex]);
+
+  const currentSlide = HERO_SLIDES[activeSlideIndex] || HERO_SLIDES[0];
+
   return (
-    <section className="relative pt-6 sm:pt-10 pb-12 sm:pb-16 bg-white overflow-hidden">
+    <section
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="relative pt-4 sm:pt-6 pb-12 sm:pb-16 bg-white overflow-hidden"
+    >
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          {/* Left Column: Value Prop, Pricing, CTAs, Trust Row */}
-          <div className="lg:col-span-6 flex flex-col justify-center">
-            {/* Top Micro-badge */}
-            <div className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-200 mb-3.5">
-              <Sparkles className="w-3.5 h-3.5 text-red-600" />
-              <span>A-01 FLAGSHIP SERIES</span>
+        {/* Slideshow Interface Control Bar & Slide Tabs */}
+        <div className="mb-6 pb-4 border-b border-gray-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 select-none">
+          {/* Slide Navigation Tabs */}
+          <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+            {HERO_SLIDES.map((slide, idx) => {
+              const isCurrent = idx === activeSlideIndex;
+              return (
+                <button
+                  key={slide.id}
+                  onClick={() => setActiveSlideIndex(idx)}
+                  className={`relative px-3 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer whitespace-nowrap overflow-hidden flex items-center gap-2 ${
+                    isCurrent
+                      ? 'bg-red-50 text-red-700 border border-red-200 shadow-xs'
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-200/60'
+                  }`}
+                  aria-label={`Switch to slide ${idx + 1}: ${slide.tabTitle}`}
+                >
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      isCurrent ? 'bg-red-600 animate-pulse' : 'bg-gray-300'
+                    }`}
+                  />
+                  <span>{slide.tabTitle}</span>
+
+                  {/* Active Slide Countdown Progress Bar */}
+                  {isCurrent && isPlaying && !isHovered && (
+                    <span
+                      key={`hero-tab-${activeSlideIndex}`}
+                      className="absolute bottom-0 left-0 h-0.5 bg-red-600 w-full"
+                      style={{
+                        animation: `expandProgress ${HERO_SLIDE_INTERVAL_MS}ms linear forwards`,
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Slideshow Master Controls */}
+          <div className="flex items-center gap-2 self-end md:self-auto shrink-0">
+            <button
+              onClick={() => setIsPlaying((prev) => !prev)}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 transition-all cursor-pointer shadow-2xs"
+              aria-label={isPlaying ? 'Pause interface slideshow' : 'Play interface slideshow'}
+            >
+              {isPlaying && !isHovered ? (
+                <>
+                  <Pause className="w-3.5 h-3.5 text-red-600" />
+                  <span className="text-[11px]">Slideshow Active</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5 text-emerald-600 fill-emerald-600" />
+                  <span className="text-[11px]">{isHovered && isPlaying ? 'Paused on Hover' : 'Resume Slideshow'}</span>
+                </>
+              )}
+            </button>
+
+            <div className="flex items-center gap-1">
+              <button
+                onClick={prevSlide}
+                className="w-8 h-8 rounded-lg border border-gray-200 bg-white hover:bg-red-50 hover:border-red-300 hover:text-red-600 text-gray-600 flex items-center justify-center transition-all cursor-pointer"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="w-8 h-8 rounded-lg border border-gray-200 bg-white hover:bg-red-50 hover:border-red-300 hover:text-red-600 text-gray-600 flex items-center justify-center transition-all cursor-pointer"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
+          </div>
+        </div>
 
-            {/* Main Headline */}
-            <h1 className="font-black text-gray-900 tracking-tight leading-[1.04] text-3xl sm:text-4xl md:text-5xl lg:text-[52px] uppercase">
-              <span className="headline-red-outline text-red-600 inline-block">STOP USING ORDINARY KEYS.</span><br />
-              <span className="headline-red-outline text-red-600 inline-block">UPGRADE TO SMART ACCESS.</span>
-            </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Column: Slideshow Dynamic Headline, Highlights, Pricing, CTAs */}
+          <div className="lg:col-span-6 flex flex-col justify-center">
+            {/* Animated Slide Content Box */}
+            <div key={currentSlide.id} className="animate-in fade-in slide-in-from-left-4 duration-300">
+              {/* Micro-badge */}
+              <div className="inline-flex items-center gap-1.5 self-start px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-200 mb-3.5">
+                <Sparkles className="w-3.5 h-3.5 text-red-600" />
+                <span>{currentSlide.badge}</span>
+              </div>
 
-            {/* Sub-headline */}
-            <p className="mt-3.5 text-base sm:text-lg font-semibold text-gray-600 uppercase tracking-wide">
-              SECURE YOUR HOME WITH MULTIPLE WAYS TO UNLOCK.
-            </p>
+              {/* Main Headline */}
+              <h1 className="font-black text-gray-900 tracking-tight leading-[1.04] text-3xl sm:text-4xl md:text-5xl lg:text-[50px] uppercase">
+                <span className="headline-red-outline text-red-600 inline-block">
+                  {currentSlide.headlinePrefix}
+                </span>
+                <br />
+                <span className="headline-red-outline text-red-600 inline-block">
+                  {currentSlide.headlineHighlight}
+                </span>
+              </h1>
+
+              {/* Sub-headline */}
+              <p className="mt-3.5 text-base sm:text-lg font-semibold text-gray-600 uppercase tracking-wide">
+                {currentSlide.subheadline}
+              </p>
+
+              {/* Feature Tags Row */}
+              <div className="mt-3.5 flex flex-wrap items-center gap-2">
+                {currentSlide.bullets.map((bullet, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gray-100/90 text-gray-800 text-xs font-bold border border-gray-200/80"
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-red-600 shrink-0" />
+                    <span>{bullet}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
 
             {/* Price Box */}
             <div className="mt-6 flex items-baseline flex-wrap gap-3 p-3.5 sm:p-4 rounded-xl bg-gray-50 border border-gray-200/80">
@@ -121,12 +261,28 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
           </div>
 
-          {/* Right Column: Interactive Gallery */}
+          {/* Right Column: Synchronized Interactive Gallery */}
           <div className="lg:col-span-6">
-            <HeroGallery images={PRODUCT_IMAGES} onOpenLightbox={onOpenLightbox} />
+            <HeroGallery
+              images={PRODUCT_IMAGES}
+              onOpenLightbox={onOpenLightbox}
+              selectedIndex={currentSlide.imageIndex}
+              onSelectIndex={(index) => {
+                // Find matching slide or default to index
+                const matchedSlide = HERO_SLIDES.findIndex((s) => s.imageIndex === index);
+                if (matchedSlide !== -1) {
+                  setActiveSlideIndex(matchedSlide);
+                } else {
+                  setActiveSlideIndex(index % HERO_SLIDES.length);
+                }
+              }}
+              isPlaying={isPlaying}
+              onTogglePlay={() => setIsPlaying((prev) => !prev)}
+            />
           </div>
         </div>
       </div>
     </section>
   );
 };
+
