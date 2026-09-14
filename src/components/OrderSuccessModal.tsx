@@ -27,7 +27,8 @@ export const OrderSuccessModal: React.FC<OrderSuccessModalProps> = ({
     currentTier.totalPrice,
     businessWhatsApp,
     orderData.fullName,
-    `${orderData.city}, ${orderData.state}`
+    `${orderData.city}, ${orderData.state}`,
+    orderReference
   );
 
   return (

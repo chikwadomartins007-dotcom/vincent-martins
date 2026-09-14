@@ -104,22 +104,33 @@ export const HeroGallery: React.FC<HeroGalleryProps> = ({
           className="relative aspect-[4/3] sm:aspect-[16/13] w-full rounded-xl overflow-hidden bg-gray-900 cursor-zoom-in flex items-center justify-center"
         >
           {/* Slides with Cross-Fade */}
-          {images.map((img, idx) => (
-            <div
-              key={img.id}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                idx === selectedIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-              }`}
-            >
-              <img
-                src={img.src}
-                alt={img.alt}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-103"
-                referrerPolicy="no-referrer"
-                loading={idx === 0 ? 'eager' : 'lazy'}
-              />
-            </div>
-          ))}
+          {images.map((img, idx) => {
+            const isDiagram =
+              img.src.includes('Ha59') ||
+              img.src.includes('H1f9') ||
+              img.src.includes('H6d5') ||
+              img.src.includes('Ha7c');
+            return (
+              <div
+                key={img.id}
+                className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
+                  idx === selectedIndex ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+                }`}
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className={`w-full h-full ${
+                    isDiagram
+                      ? 'object-contain bg-white p-2'
+                      : 'object-cover transition-transform duration-700 group-hover:scale-103'
+                  }`}
+                  referrerPolicy="no-referrer"
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                />
+              </div>
+            );
+          })}
 
           {/* Radial soft ground shadow */}
           <div

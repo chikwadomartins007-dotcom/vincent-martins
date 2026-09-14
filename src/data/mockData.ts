@@ -115,6 +115,45 @@ export function getTierForQty(qty: number): PricingTier {
   return PRICING_TIERS[0];
 }
 
+export const FACTORY_SLIDES = [
+  {
+    id: 'functionality-safety',
+    src: '/assets/img/Ha59b69eaf8b84f4a9dea5ee079f40b681.png',
+    alt: 'Functionality & Safety: App, Fingerprint, Password, Card, Key, Face, Palm Unlock, Daily Waterproof, Auto Lock, 6068 Lock Body, Tuya App',
+    title: 'Functionality & 8 Access Modes',
+    category: 'FUNCTIONALITY & SAFETY',
+    caption: 'Full access overview: Tuya App, Fingerprint, Password, NFC Card, Laser Key, 3D Face ID, Palm Vein, Waterproofing & 6068 Body.',
+    badge: '8 Unlocking Modes',
+  },
+  {
+    id: 'parameter-size',
+    src: '/assets/img/H1f9721f6088c455d83a5210c178ff9848.png',
+    alt: 'Parameter size 70mm x 420mm: Battery compartment, HD display, one-click unlock, mechanical handle, cat eye camera, facial recognition module, Type-C charging port',
+    title: 'Architectural Dimensions & Components',
+    category: 'PARAMETER SIZE (70×420MM)',
+    caption: 'Engineering schematic: 70mm width by 420mm height, indoor HD display, outdoor cat-eye camera, Type-C emergency charging & master keyhole.',
+    badge: '70mm × 420mm',
+  },
+  {
+    id: 'package-accessories',
+    src: '/assets/img/H6d5ba8d74f614c58a8c4f37b96c1bca9P.png',
+    alt: 'In The Box: RFID Cards, Heavy-duty Mortise, Cylinder + Keys, USB cable, Power pack, Screws, and Factory Box',
+    title: 'Complete Package & In-The-Box Contents',
+    category: 'WHAT IS IN THE BOX',
+    caption: 'Everything included: 2 RFID Smart Cards, 304 Stainless Steel Mortise, High-Security Cylinder + Keys, USB Cable, Power Battery, Installation Screws & Retail Box.',
+    badge: 'Full Box Kit',
+  },
+  {
+    id: 'certifications-testing',
+    src: '/assets/img/Ha7c3a23ab2614268984bce17521e7e6ab.png',
+    alt: 'Certifications & Testing: Tuya Intelligence Inside, 10000h battery life, 250K service life, 72h temperature testing, CE, FC, EMC, RoHS, ISO Certified',
+    title: 'Factory Certifications & Durability Testing',
+    category: 'CERTIFICATIONS & RELIABILITY',
+    caption: 'Proven reliability: 10,000+ hours battery life, 250,000 cycle service life, 72h high/low temperature testing, CE, FCC, EMC, RoHS & ISO Certified.',
+    badge: 'CE / FCC / ISO',
+  },
+];
+
 export const PRODUCT_IMAGES: ProductImage[] = [
   {
     id: 'hero-01',
@@ -124,11 +163,32 @@ export const PRODUCT_IMAGES: ProductImage[] = [
     badge: 'Flagship System',
   },
   {
-    id: 'methods',
-    src: '/assets/img/smart-lock-methods.png',
-    alt: 'A-01 Smart Door Lock Multiple Unlocking Methods: Face, Palm Vein, Fingerprint, PIN, NFC Card, Key, Combination, App',
-    label: 'Multiple Unlock Methods',
+    id: 'functionality-safety',
+    src: '/assets/img/Ha59b69eaf8b84f4a9dea5ee079f40b681.png',
+    alt: 'Functionality & Safety: 8 Unlock Methods, Tuya App, Daily Waterproof, 6068 Lock Body',
+    label: 'Functionality & Safety',
     badge: '8 Access Modes',
+  },
+  {
+    id: 'parameter-size',
+    src: '/assets/img/H1f9721f6088c455d83a5210c178ff9848.png',
+    alt: 'Parameter Size 70×420mm: Battery Compartment, HD Screen, Emergency Key & Type-C',
+    label: 'Dimensions & Specs',
+    badge: '70×420mm',
+  },
+  {
+    id: 'package-accessories',
+    src: '/assets/img/H6d5ba8d74f614c58a8c4f37b96c1bca9P.png',
+    alt: 'Complete In The Box Package: Cards, Mortise, Cylinder + Keys, USB Cable, Power, Screws',
+    label: 'In The Box Accessories',
+    badge: 'Complete Kit',
+  },
+  {
+    id: 'certifications-testing',
+    src: '/assets/img/Ha7c3a23ab2614268984bce17521e7e6ab.png',
+    alt: 'Certifications & Testing: Tuya Powered, 10,000h Battery, 250K Cycles, CE, FCC, RoHS, ISO',
+    label: 'Certifications & Testing',
+    badge: 'CE / FCC / ISO',
   },
   {
     id: 'mortise',

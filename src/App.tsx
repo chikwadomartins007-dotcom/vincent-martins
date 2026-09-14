@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { VideoSection } from './components/VideoSection';
+import { RotatingSpecsSlideshow } from './components/RotatingSpecsSlideshow';
 import { ProblemSection } from './components/ProblemSection';
 import { SmartAccessSection } from './components/SmartAccessSection';
 import { HardwareHighlights } from './components/HardwareHighlights';
@@ -16,7 +17,6 @@ import { StickyBottomBar } from './components/StickyBottomBar';
 import { LightboxModal } from './components/LightboxModal';
 import { OrderSuccessModal } from './components/OrderSuccessModal';
 import { PRODUCT_IMAGES, DEFAULT_WHATSAPP, getTierForQty } from './data/mockData';
-import { createWhatsAppUrl } from './utils/format';
 import { OrderFormData } from './types';
 
 export default function App() {
@@ -29,7 +29,7 @@ export default function App() {
   const [orderReference, setOrderReference] = useState<string>('');
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
 
-  // WhatsApp business contact
+  // WhatsApp business contact for post-order confirmation
   const businessWhatsApp = DEFAULT_WHATSAPP;
 
   // Pricing calculations
@@ -40,11 +40,6 @@ export default function App() {
     if (orderSection) {
       orderSection.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  const handleOpenWhatsApp = () => {
-    const url = createWhatsAppUrl(quantity, currentTier.totalPrice, businessWhatsApp);
-    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const handleOpenLightbox = (index: number) => {
@@ -62,19 +57,24 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white text-[#111111] flex flex-col font-['Montserrat',sans-serif]">
       {/* Top Navbar */}
-      <Header onWhatsAppClick={handleOpenWhatsApp} />
+      <Header onOrderClick={scrollToOrder} />
 
       {/* Main Content Sections */}
       <main className="flex-1">
         {/* Hero Section */}
         <Hero
           onOrderClick={scrollToOrder}
-          onWhatsAppClick={handleOpenWhatsApp}
           onOpenLightbox={handleOpenLightbox}
         />
 
         {/* 9:16 Video Showcase */}
         <VideoSection />
+
+        {/* Authentic Factory Specifications Live Rotating Slideshow */}
+        <RotatingSpecsSlideshow
+          onOrderClick={scrollToOrder}
+          onOpenLightbox={handleOpenLightbox}
+        />
 
         {/* The Problem Section */}
         <ProblemSection />
@@ -100,7 +100,6 @@ export default function App() {
           quantity={quantity}
           onQuantityChange={setQuantity}
           onSubmitOrder={handleOrderSubmit}
-          businessWhatsApp={businessWhatsApp}
         />
 
         {/* Customer Testimonials */}
@@ -112,19 +111,17 @@ export default function App() {
         {/* Final Conversion Banner */}
         <FinalCta
           onOrderClick={scrollToOrder}
-          onWhatsAppClick={handleOpenWhatsApp}
         />
       </main>
 
       {/* Footer */}
-      <Footer onWhatsAppClick={handleOpenWhatsApp} />
+      <Footer onOrderClick={scrollToOrder} />
 
       {/* Mobile Sticky CTA Bar */}
       <StickyBottomBar
         totalPrice={currentTier.totalPrice}
         quantity={quantity}
         onOrderClick={scrollToOrder}
-        onWhatsAppClick={handleOpenWhatsApp}
       />
 
       {/* Fullscreen Photo Lightbox */}
@@ -136,7 +133,7 @@ export default function App() {
         onSelectIndex={setLightboxIndex}
       />
 
-      {/* Order Confirmation Modal */}
+      {/* Order Confirmation Modal - WhatsApp ONLY available here after form submission */}
       <OrderSuccessModal
         isOpen={showSuccessModal}
         orderData={submittedOrder}

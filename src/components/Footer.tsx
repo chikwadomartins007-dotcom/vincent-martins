@@ -1,12 +1,11 @@
 import React from 'react';
-import { ShieldCheck, Truck, Headphones, MessageSquare } from 'lucide-react';
-import { DEFAULT_WHATSAPP } from '../data/mockData';
+import { ShieldCheck, Truck, Headphones, ArrowRight } from 'lucide-react';
 
 interface FooterProps {
-  onWhatsAppClick: () => void;
+  onOrderClick?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
+export const Footer: React.FC<FooterProps> = ({ onOrderClick }) => {
   return (
     <footer className="w-full bg-gray-900 text-gray-300 pt-12 pb-16 border-t border-gray-800">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,18 +46,19 @@ export const Footer: React.FC<FooterProps> = ({ onWhatsAppClick }) => {
 
           <div>
             <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3">
-              Direct Inquiries
+              Order Dispatch Desk
             </h4>
             <p className="text-xs text-gray-400 leading-relaxed mb-3">
-              Need installation assistance or bulk estate orders? Chat directly with our sales desk on WhatsApp: <strong className="text-white">0814 777 8029</strong>.
+              Ready to secure your home? Fill out the order form to secure promotional pricing. Our dispatch team verifies your door dimensions and schedules delivery before courier dispatch.
             </p>
-            <button
-              onClick={onWhatsAppClick}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-colors cursor-pointer"
+            <a
+              href="#order"
+              onClick={onOrderClick}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black bg-red-600 hover:bg-red-700 text-white transition-all cursor-pointer shadow-xs"
             >
-              <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp: 0814 777 8029</span>
-            </button>
+              <span>GO TO ORDER FORM</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </a>
           </div>
         </div>
 

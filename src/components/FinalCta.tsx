@@ -1,14 +1,13 @@
 import React from 'react';
-import { ArrowRight, MessageSquare, Truck, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowRight, Truck, ShieldCheck, Sparkles } from 'lucide-react';
 import { BASE_PRICE, ORIGINAL_PRICE, SAVINGS_PER_UNIT } from '../data/mockData';
 import { formatNaira } from '../utils/format';
 
 interface FinalCtaProps {
   onOrderClick: () => void;
-  onWhatsAppClick: () => void;
 }
 
-export const FinalCta: React.FC<FinalCtaProps> = ({ onOrderClick, onWhatsAppClick }) => {
+export const FinalCta: React.FC<FinalCtaProps> = ({ onOrderClick }) => {
   return (
     <section className="py-16 sm:py-24 bg-white border-t border-gray-200">
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,22 +39,14 @@ export const FinalCta: React.FC<FinalCtaProps> = ({ onOrderClick, onWhatsAppClic
             </span>
           </div>
 
-          {/* Action Buttons */}
-          <div className="mt-7 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
+          {/* Action Button */}
+          <div className="mt-7 flex justify-center w-full sm:w-auto">
             <button
               onClick={onOrderClick}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-14 px-8 rounded-xl font-black text-sm tracking-wide text-white bg-red-600 hover:bg-red-700 active:scale-98 transition-all shadow-md shadow-red-600/25 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-14 px-10 rounded-xl font-black text-sm tracking-wide text-white bg-red-600 hover:bg-red-700 active:scale-98 transition-all shadow-md shadow-red-600/25 cursor-pointer"
             >
               <span>ORDER YOUR SMART LOCK NOW</span>
               <ArrowRight className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={onWhatsAppClick}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl font-bold text-sm tracking-wide text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 active:scale-98 transition-all cursor-pointer"
-            >
-              <MessageSquare className="w-4 h-4 text-emerald-600" />
-              <span>ORDER ON WHATSAPP</span>
             </button>
           </div>
 

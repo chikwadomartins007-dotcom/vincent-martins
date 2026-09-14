@@ -7,7 +7,6 @@ import {
   HeadphonesIcon,
   CheckCircle2,
   ArrowRight,
-  MessageSquare,
   Sparkles,
   ChevronLeft,
   ChevronRight,
@@ -26,7 +25,6 @@ import { formatNaira } from '../utils/format';
 
 interface HeroProps {
   onOrderClick: () => void;
-  onWhatsAppClick: () => void;
   onOpenLightbox: (index: number) => void;
 }
 
@@ -34,7 +32,6 @@ const HERO_SLIDE_INTERVAL_MS = 4800;
 
 export const Hero: React.FC<HeroProps> = ({
   onOrderClick,
-  onWhatsAppClick,
   onOpenLightbox,
 }) => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -202,6 +199,7 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             {/* CTAs */}
+            {/* CTA Group */}
             <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               <button
                 onClick={onOrderClick}
@@ -211,13 +209,20 @@ export const Hero: React.FC<HeroProps> = ({
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              <button
-                onClick={onWhatsAppClick}
-                className="inline-flex items-center justify-center gap-2 h-14 px-7 rounded-xl font-bold text-sm tracking-wide text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 active:scale-98 transition-all cursor-pointer"
+              <a
+                href="#video-demo"
+                className="inline-flex items-center justify-center gap-2 h-14 px-6 rounded-xl font-bold text-xs tracking-wide text-gray-800 bg-gray-100 hover:bg-gray-200 border border-gray-300 active:scale-98 transition-all"
               >
-                <MessageSquare className="w-4 h-4 text-emerald-600" />
-                <span>ORDER ON WHATSAPP</span>
-              </button>
+                <Play className="w-3.5 h-3.5 fill-red-600 text-red-600" />
+                <span>SEE VIDEO DEMO</span>
+              </a>
+
+              <a
+                href="#specifications"
+                className="inline-flex items-center justify-center gap-2 h-14 px-6 rounded-xl font-bold text-xs tracking-wide text-gray-700 bg-white hover:bg-gray-50 border border-gray-200 active:scale-98 transition-all"
+              >
+                <span>VIEW SPECIFICATIONS</span>
+              </a>
             </div>
 
             {/* Trust Row (5 elements) */}

@@ -4,7 +4,6 @@ import {
   Truck,
   RotateCcw,
   CheckCircle2,
-  MessageSquare,
   ShieldCheck,
   AlertCircle,
   PhoneCall,
@@ -14,22 +13,20 @@ import {
   Loader2,
   Mail,
 } from 'lucide-react';
-import { NIGERIAN_STATES, getTierForQty, DEFAULT_WHATSAPP, FORMSPREE_ENDPOINT, DISPLAY_WHATSAPP } from '../data/mockData';
-import { formatNaira, createWhatsAppUrl } from '../utils/format';
+import { NIGERIAN_STATES, getTierForQty, FORMSPREE_ENDPOINT, DISPLAY_WHATSAPP } from '../data/mockData';
+import { formatNaira } from '../utils/format';
 import { OrderFormData } from '../types';
 
 interface OrderFormProps {
   quantity: number;
   onQuantityChange: (q: number) => void;
   onSubmitOrder: (data: OrderFormData, orderRef?: string) => void;
-  businessWhatsApp: string;
 }
 
 export const OrderForm: React.FC<OrderFormProps> = ({
   quantity,
   onQuantityChange,
   onSubmitOrder,
-  businessWhatsApp,
 }) => {
   const currentTier = getTierForQty(quantity);
 
@@ -162,14 +159,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({
       onSubmitOrder({ ...formData, quantity }, generatedRef);
     }
   };
-
-  const whatsAppDirectLink = createWhatsAppUrl(
-    quantity,
-    currentTier.totalPrice,
-    businessWhatsApp,
-    formData.fullName,
-    formData.city ? `${formData.city}, ${formData.state}` : undefined
-  );
 
   return (
     <section id="order" className="py-14 sm:py-20 bg-gray-50 border-t border-gray-200">
@@ -403,12 +392,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 )}
               </div>
 
-              {/* Submit Buttons */}
-              <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              {/* Submit CTA */}
+              <div className="pt-3">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`flex-1 inline-flex items-center justify-center h-14 px-8 rounded-xl font-black text-sm tracking-wide text-white transition-all shadow-md cursor-pointer ${
+                  className={`w-full inline-flex items-center justify-center gap-2 h-14 px-8 rounded-xl font-black text-sm tracking-wide text-white transition-all shadow-md cursor-pointer ${
                     isSubmitting
                       ? 'bg-red-400 cursor-not-allowed opacity-90'
                       : 'bg-red-600 hover:bg-red-700 active:scale-98 shadow-red-600/25'
@@ -420,25 +409,15 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                       <span>SUBMITTING ORDER TO SALES DESK...</span>
                     </div>
                   ) : (
-                    <span>PLACE MY ORDER</span>
+                    <span>SUBMIT ORDER • PAYMENT ON DELIVERY</span>
                   )}
                 </button>
-
-                <a
-                  href={whatsAppDirectLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 h-14 px-6 rounded-xl font-bold text-sm tracking-wide text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 transition-colors"
-                >
-                  <MessageSquare className="w-4 h-4 text-emerald-600" />
-                  <span>ORDER ON WHATSAPP ({DISPLAY_WHATSAPP})</span>
-                </a>
               </div>
 
               {/* Formspree & Direct Notice */}
               <div className="pt-2 text-center text-xs text-gray-500 flex items-center justify-center gap-1.5 font-medium">
                 <Mail className="w-3.5 h-3.5 text-red-600 shrink-0" />
-                <span>Sales details are instantly transmitted to our sales email via Formspree & WhatsApp: {DISPLAY_WHATSAPP}.</span>
+                <span>Your order details are transmitted securely. Once submitted, our dispatch team calls to confirm your order and schedule delivery.</span>
               </div>
             </form>
           </div>
@@ -506,19 +485,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               </div>
             </div>
 
-            {/* Support Hotline card */}
-            <div className="p-5 rounded-xl bg-red-50/80 border border-red-200 text-center">
-              <p className="text-xs font-bold text-red-900 uppercase">Have questions before ordering?</p>
-              <p className="text-xs text-red-700 mt-1">Our customer support engineers are on standby.</p>
-              <a
-                href={whatsAppDirectLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors w-full"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span>Chat with Product Specialist</span>
-              </a>
+            {/* Door & Installation Guidance Card */}
+            <div className="p-5 rounded-xl bg-gray-50 border border-gray-200 text-center">
+              <p className="text-xs font-bold text-gray-900 uppercase">Door Compatibility Guarantee</p>
+              <p className="text-xs text-gray-600 mt-1.5 leading-relaxed font-medium">
+                Fits standard wooden, metal, armored, and security doors (38mm to 70mm thickness). Once you submit the form, our dispatch technician calls to verify your door measurements before shipping.
+              </p>
             </div>
           </div>
         </div>

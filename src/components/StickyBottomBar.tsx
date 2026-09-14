@@ -1,19 +1,17 @@
 import React from 'react';
-import { MessageSquare, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { formatNaira } from '../utils/format';
 
 interface StickyBottomBarProps {
   totalPrice: number;
   quantity: number;
   onOrderClick: () => void;
-  onWhatsAppClick: () => void;
 }
 
 export const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
   totalPrice,
   quantity,
   onOrderClick,
-  onWhatsAppClick,
 }) => {
   return (
     <>
@@ -32,24 +30,13 @@ export const StickyBottomBar: React.FC<StickyBottomBarProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={onOrderClick}
-              className="inline-flex items-center justify-center gap-1.5 h-11 px-4 rounded-xl text-xs font-black text-white bg-red-600 hover:bg-red-700 active:scale-95 transition-all shadow-sm"
-            >
-              <span>ORDER NOW</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-
-            <button
-              onClick={onWhatsAppClick}
-              className="inline-flex items-center justify-center h-11 w-11 rounded-xl text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 active:scale-95 transition-all"
-              aria-label="Order on WhatsApp"
-              title="Order on WhatsApp"
-            >
-              <MessageSquare className="w-4 h-4 text-emerald-600" />
-            </button>
-          </div>
+          <button
+            onClick={onOrderClick}
+            className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-xl text-xs font-black text-white bg-red-600 hover:bg-red-700 active:scale-95 transition-all shadow-sm cursor-pointer"
+          >
+            <span>ORDER NOW • PAY ON DELIVERY</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </>
